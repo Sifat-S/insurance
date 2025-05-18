@@ -12,12 +12,12 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Actions</th>
+                <th>{{__('Name')}}</th>
+                <th>{{__('Surname')}}</th>
+                <th>{{__('Phone')}}</th>
+                <th>{{__('Email')}}</th>
+                <th>{{__('Address')}}</th>
+                <th>{{__('Actions')}}</th>
             </tr>
             </thead>
             <tbody>

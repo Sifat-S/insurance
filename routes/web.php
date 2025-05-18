@@ -7,6 +7,7 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShortCodeController;
 use App\Http\Middleware\IsAdmin;
+use App\Http\Controllers\LangController;
 
 // Auth routes (login, register, etc.)
 Auth::routes();
@@ -28,3 +29,4 @@ Route::resource('cars', CarController::class)->middleware('auth');
 
 Route::resource('shortcodes', ShortCodeController::class)->only('index')->middleware('auth');
 Route::resource('shortcodes', ShortCodeController::class)->only(['destroy', 'create', 'store', 'edit', 'update'])->middleware(IsAdmin::class);
+Route::get('setLanguage/{lang}', [LangController::class, 'switchLang'])->name('setLanguage');
