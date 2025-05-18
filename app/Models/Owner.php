@@ -10,5 +10,9 @@ class Owner extends Model
 
     // Allow mass assignment for these fields
     protected $fillable = ['name', 'surname', 'phone', 'email', 'address'];
+    public function cars()
+    {
+        return $this->hasMany(Car::class);
+    }
 }
 
