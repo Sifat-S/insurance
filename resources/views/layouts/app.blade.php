@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Laravel CRUD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -26,11 +28,45 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cars.index') }}">Cars</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('shortcodes.index') }}">ShortCodes</a>
+                </li>
             </ul>
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
+                <!-- Authentication Links -->
+                @guest
+                    @if (Route::has('login'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                    @endif
 
+                    @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                    @endif
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            {{ Auth::user()->name }}
+                            {{ Auth::user()->name }} ({{ (Auth::user()->type!='admin')?'viewer':'admin' }})
+                        </a>
+                    </li>
+                <div>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">Logout</a>
+                    </li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
+
+                @endguest
             </ul>
         </div>
     </div>
@@ -39,5 +75,6 @@
 <div class="container mt-4">
     @yield('content')
 </div>
+<p>[phone]</p>
 </body>
 </html>

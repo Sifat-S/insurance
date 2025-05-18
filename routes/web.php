@@ -1,25 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShortCodeController;
+use App\Http\Middleware\IsAdmin;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Auth routes (login, register, etc.)
 Auth::routes();
 
-Route::get('/index', function () {
-    return view('owners.index');
+// Redirect root URL based on authentication status
+Route::get('/', function () {
+    return Auth::check()
+        ? redirect()->route('owners.index')
+        : redirect()->route('login');
 });
-Route::get('/', [OwnerController::class, 'index']);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Home route
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::resource('owners', OwnerController::class);
-Route::resource('cars', CarController::class);
+// Resource routes for owners and cars
+Route::resource('owners', OwnerController::class)->middleware('auth');
+Route::resource('cars', CarController::class)->middleware('auth');
 
 
-#Auth::routes();
-
-#Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('shortcodes', ShortCodeController::class)->only('index')->middleware('auth');
+Route::resource('shortcodes', ShortCodeController::class)->only(['destroy', 'create', 'store', 'edit', 'update'])->middleware(IsAdmin::class);
