@@ -6,10 +6,12 @@ use App\Models\Car;
 use Illuminate\Http\Request;
 use App\Models\Owner;
 use Illuminate\Support\Facades\App;
+use App\Http\Requests\CarRequest;
+
 
 class CarController extends Controller
 {
-    public function index()
+
     public function index(Request $request)
     {
         $cars = Car::all();
@@ -22,7 +24,7 @@ public function create()
     return view('cars.create', compact('owners'));
 }
 
-public function store(Request $request)
+public function store(CarRequest  $request)
 {
     $car = new Car();
     $car->reg_number = $request->reg_number;
@@ -40,7 +42,7 @@ public function edit(Car $car)
     return view('cars.edit', compact('car', 'owners'));
 }
 
-public function update(Request $request, Car $car)
+public function update(CarRequest  $request, Car $car)
 {
     $car->reg_number = $request->reg_number;
     $car->brand = $request->brand;

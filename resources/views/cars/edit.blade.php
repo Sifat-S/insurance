@@ -20,25 +20,28 @@
                     @method('PUT')
                     <div class="mb-3">
                         <label for="reg_number" class="form-label">Registration Number</label>
-                        <input type="text" name="reg_number" class="form-control" id="reg_number" value="{{$car->reg_number}}" required>
+                        <input type="text" name="reg_number" class="form-control @error('reg_number') is-invalid @enderror" id="reg_number" value="{{ old('reg_number', $car->reg_number ?? '') }}" oninput="this.value = this.value.toUpperCase()">
                     </div>
 
                     <div class="mb-3">
                         <label for="brand" class="form-label">Brand</label>
-                        <input type="text" name="brand" class="form-control" id="brand" value="{{$car->brand}}" required>
+                        <input type="text" name="brand" class="form-control @error('brand') is-invalid @enderror" id="brand" value="{{ old('brand', $car->brand ?? '') }}">
+
                     </div>
 
                     <div class="mb-3">
                         <label for="model" class="form-label">Model</label>
-                        <input type="text" name="model" class="form-control" id="model" value="{{$car->model}}" required>
+                        <input type="text" name="model" class="form-control @error('model') is-invalid @enderror" id="model" value="{{ old('model', $car->model ?? '') }}">
+
                     </div>
 
                     <div class="mb-3">
                         <label for="owner" class="form-label">Owner</label>
-                        <select class="form-control" name="owner_id">
-                            <option value="" selected>-</option>
+                        <select class="form-control @error('owner_id') is-invalid @enderror" name="owner_id">
+                            <option value="">-</option>
                             @foreach($owners as $owner)
-                                <option value="{{ $owner->id }}"  {{ ($car->owner_id==$owner->id)?'selected':'' }}  >{{ $owner->name }} {{ $owner->surname }}</option>
+                                <option value="{{ $owner->id }}"  {{ old('owner_id') == $owner->id ? 'selected' : '' }}>{{ $owner->name }} {{ $owner->surname }}</option>
+
                             @endforeach
 
                         </select>

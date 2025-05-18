@@ -1,32 +1,41 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\CarController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShortCodeController;
-use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\LangController;
+use App\Http\Middleware\Bug;
+use App\Http\Middleware\IsAdmin;
 
-// Auth routes (login, register, etc.)
 Auth::routes();
 
-// Redirect root URL based on authentication status
+Route::resource('cars', CarController::class)->only('index')->middleware('auth');
+Route::resource('owners', OwnerController::class)->only('index')->middleware('auth');
+
 Route::get('/', function () {
     return Auth::check()
-        ? redirect()->route('owners.index')
-        : redirect()->route('login');
+            ? redirect()->route('owners.index')
+            : redirect()->route('login');
 });
 
-// Home route
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Resource routes for owners and cars
-Route::resource('owners', OwnerController::class)->middleware('auth');
-Route::resource('cars', CarController::class)->middleware('auth');
 
+//Route::resource('owners', OwnerController::class);
+//Route::resource('cars', CarController::class);
+
+Route::resource('cars', CarController::class)->only('index')->middleware('auth');
+Route::resource('owners', OwnerController::class)->only('index')->middleware('auth');
+
+Route::resource('cars', CarController::class)->except(['index', 'destroy'])->middleware(Bug::class);
+Route::resource('cars', CarController::class)->only(['destroy', 'create', 'store', 'edit', 'update'])->middleware(IsAdmin::class);
+
+Route::resource('owners', OwnerController::class)->except(['index', 'destroy'])->middleware(Bug::class);
+Route::resource('owners', OwnerController::class)->only(['destroy', 'create', 'store', 'edit', 'update'])->middleware(IsAdmin::class);
 
 Route::resource('shortcodes', ShortCodeController::class)->only('index')->middleware('auth');
+Route::resource('shortcodes', ShortCodeController::class)->except(['index', 'destroy'])->middleware(Bug::class);
 Route::resource('shortcodes', ShortCodeController::class)->only(['destroy', 'create', 'store', 'edit', 'update'])->middleware(IsAdmin::class);
+
 Route::get('setLanguage/{lang}', [LangController::class, 'switchLang'])->name('setLanguage');
